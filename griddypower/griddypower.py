@@ -1,10 +1,50 @@
 """Main module."""
 
+import dateutil.parser
+
 LOAD_ZONES = ["LZ_HOUSTON", "LZ_WEST", "LZ_NORTH", "LZ_SOUTH"]
 
 GETNOW_API_URL = "https://app.gogriddy.com/api/v1/insights/getnow"
 DEFAULT_REQUEST_TIMEOUT = 15
 
+
+class GriddyPriceData:
+    """Griddy price data."""
+
+    def __init__(self, data):
+        self._now = GriddyPricePoint(data["now"])
+        self._forecast = []
+        for price_point in data["forecast"]:
+            self._forecast.append(GriddyPricePoint(price_point))
+
+    @property
+    def now(self):
+        return self._now
+
+    @property
+    def forecast(self):
+        return self._forecast
+
+
+class GriddyPricePoint:
+    """Object that represents griddy price data for a specific date time."""
+
+    def __init__(self, data):
+        self._price_ckwh = data["price_ckwh"]
+        self._price_type = data["price_type"]
+        self._datetime = dateutil.parser.parse(date["date"])
+
+    @property
+    def datetime(self):
+        return self._datetime
+
+    @property
+    def price_cents_kwh(self):
+        return self._price_ckwh
+
+    @property
+    def price_type(self):
+        return self._price_type
 
 
 class AsyncGriddy:
@@ -26,4 +66,4 @@ class AsyncGriddy:
             timeout=self._timeout,
             json={"settlement_point": self._settlement_point},
         )
-        return await response.json()
+        return GriddyPriceData(await response.json())
