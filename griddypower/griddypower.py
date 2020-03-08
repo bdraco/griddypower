@@ -1,11 +1,10 @@
 """Main module."""
 
-import aiohttp
-
 LOAD_ZONES = ["LZ_HOUSTON", "LZ_WEST", "LZ_NORTH", "LZ_SOUTH"]
 
 GETNOW_API_URL = "https://app.gogriddy.com/api/v1/insights/getnow"
 DEFAULT_REQUEST_TIMEOUT = 15
+
 
 
 class AsyncGriddy:
