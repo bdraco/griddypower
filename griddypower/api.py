@@ -1,6 +1,7 @@
 """Main module."""
 
 import dateutil.parser
+import datetime
 
 LOAD_ZONES = ["LZ_HOUSTON", "LZ_WEST", "LZ_NORTH", "LZ_SOUTH"]
 
@@ -32,7 +33,7 @@ class GriddyPricePoint:
     def __init__(self, data):
         self._price_ckwh = data["price_ckwh"]
         self._price_type = data["price_type"]
-        self._datetime = dateutil.parser.parse(date["date"])
+        self._datetime = as_utc_from_local(dateutil.parser.parse(data["date"]))
 
     @property
     def datetime(self):
@@ -67,3 +68,8 @@ class AsyncGriddy:
             json={"settlement_point": self._settlement_point},
         )
         return GriddyPriceData(await response.json())
+
+
+def as_utc_from_local(dtime):
+    """Converts the datetime returned from an activity to UTC."""
+    return dtime.astimezone(tz=datetime.timezone.utc)
