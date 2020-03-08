@@ -9,7 +9,7 @@ import aiounittest
 from aiohttp import ClientError, ClientSession
 from aioresponses import aioresponses
 
-from griddypower.api import GETNOW_API_URL, AsyncGriddy, LOAD_ZONES
+from griddypower.async_api import GETNOW_API_URL, AsyncGriddy, LOAD_ZONES
 
 
 def load_fixture(filename):
